@@ -1,6 +1,8 @@
 import pygame
 import graphics
 import maze_util
+import copy
+from maze_util import maze_after_pacman_move
 
 # Constants
 CELL_SIZE = 24
@@ -20,7 +22,12 @@ def draw_maze(maze, pacman_direction= "East", input_type="keyboard"):
     pygame.display.set_caption("Pacman Maze")
     clock = pygame.time.Clock()
 
+    # Game Score Calculation
+    food_score = 0
+
+
     running = True
+
     while running:
         screen.fill(BG_COLOR)
 
@@ -52,13 +59,37 @@ def draw_maze(maze, pacman_direction= "East", input_type="keyboard"):
                 running = False
 
         input = getinput(where=input_type)
-        if input: pacman_direction = input
+        if input:
+            pacman_direction = input
+            #TODO
 
-        clock.tick(30)
+            # update maze
+            old_maze = copy.deepcopy(maze)
+            maze = maze_after_pacman_move(old_maze, pacman_direction)
 
-        #TODO
-        # maze = answerfromagent()
+            # check if pacman died
+            game_over = maze_util.did_pacman_die(old_maze, maze)
+            if game_over:
+                break
 
+            # check if game won (no food left)
+            pacman_win = maze_util.did_pacman_win(maze)
+            if pacman_win:
+                break
+
+            # check if pacman ate
+            if maze_util.did_pacman_eat(old_maze, maze):
+                food_score += 1
+
+
+
+            # maze = update_maze(maze, "pacman", input)
+
+        clock.tick(10)
+
+    #TODO show score etc.
+    # game_over, pacman_win
+    print(f"food score: {food_score}")
     pygame.quit()
 
 def getinput(where="keyboard"):
@@ -77,6 +108,9 @@ def getinput(where="keyboard"):
     #else: out_direction = "South" #TODO agent
 
     return out_direction
+
+
+
 
 
 if __name__ == "__main__":
