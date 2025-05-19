@@ -17,7 +17,7 @@ random_seed = 42
 
 
 if __name__ == "__main__":
-    maze_path = "./mazes/smallMaze.txt"
+    maze_path = "./mazes/bigMaze.txt"
     agents = ["keyboard"]
     for agent in agents:
         maze = Maze(maze_path)
