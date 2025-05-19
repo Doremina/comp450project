@@ -8,7 +8,17 @@ import copy
 CELL_SIZE = 24
 WALL_COLOR = (100, 100, 100)
 PACMAN_COLOR = (255, 255, 0)
-GHOST_COLOR = (255, 0, 0)
+GHOST_COLORS = [
+    (255, 0, 0),       # Red
+    (0, 255, 255),     # Cyan
+    (255, 105, 180),   # Hot Pink
+    (0, 255, 0),       # Lime Green
+    (255, 165, 0),     # Orange
+    (138, 43, 226),    # Blue Violet
+    (255, 255, 0),     # Yellow
+    (0, 0, 255),       # Blue
+    (139, 69, 19),     # Saddle Brown
+]
 FOOD_COLOR = (255, 255, 255)
 BG_COLOR = (0, 0, 0)
 
@@ -85,12 +95,13 @@ def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboar
                     r = CELL_SIZE // 2 - 2
                     draw_pacman_directional(screen, (cx, cy), r, PACMAN_COLOR, maze.pacman_direction)
 
-                elif current_cell == 'G':
+                elif current_cell.isdigit():
                     # TODO probably need to draw different ghosts as different agents too
 
                     # Scale and offset the shape to the cell center
                     cx, cy = rect.center
-                    draw_ghost(screen, (cx, cy), GHOST_COLOR)
+                    color = GHOST_COLORS[int(current_cell)]
+                    draw_ghost(screen, (cx, cy), color)
 
 
 
@@ -101,16 +112,25 @@ def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboar
             if event.type == pygame.QUIT:
                 running = False
 
-        # TODO this is where agents will send their inputs
-        input_pacman = util.getinput(where=input_type)
-        if input_pacman:
-            maze.pacman_direction = input_pacman
+        # this is where agents will send their inputs
+        if turn == "pacman":
+            input_pacman = util.getinput(where=input_type)
+            if input_pacman:
+                maze.pacman_direction = input_pacman
 
-            # update maze
-            maze.update_after_pacman_move(input_pacman)
-            maze.check_game_end()
+                # update maze
+                maze.update_after_pacman_move(input_pacman)
+                if maze.check_game_end():
+                    running = False
+
+            turn = "ghost"
+
+        elif turn == "ghost":
+            maze.move_ghosts()
+            if maze.check_game_end():
+                running = False
+            turn = "pacman"
+
 
         clock.tick(10)
-
-    maze.check_game_end()
     pygame.quit()

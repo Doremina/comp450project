@@ -1,14 +1,20 @@
 import copy
 import pygame
+from ghost import Ghost
 
 class Maze:
     def __init__(self, maze_txt_path):
-        self.front_maze, self.back_maze = self.load_maze(maze_txt_path)
+
         self.pacman_score = 0
         self.pacman_steps = 0
         self.pacman_die = False
         self.pacman_win = False
         self.pacman_direction = "East"
+
+        self.ghosts = []
+
+        self.front_maze, self.back_maze = self.load_maze(maze_txt_path)
+
 
     def load_maze(self, path):
         # Maze is an array,
@@ -32,11 +38,16 @@ class Maze:
                 for x in range(len_x):
                     if lines[y][x] == "." or lines[y][x] == "W":
                         back[y][x] = lines[y][x]
-                        front[y][x] = ' '
-                    elif lines[y][x] == "P" or lines[y][x] == "G":
+                    elif lines[y][x] == "P":
                         back[y][x] = ' '
                         front[y][x] = lines[y][x]
+                    elif lines[y][x].isdigit():
+                        back[y][x] = '.' # ghost has food in background at start by default
+                        front[y][x] = lines[y][x]
+                        self.ghosts.append(Ghost(lines[y][x]))
 
+        # sort ghosts by their ids
+        self.ghosts.sort(key=lambda g: g.g_id)
         return front, back
 
     def getpacmanlocation(self):
@@ -47,14 +58,26 @@ class Maze:
                     pacman_location = (y, x)
                     return pacman_location
 
-    def legalactions(self, agent="pacman", location=None):
+    def getghostlocation(self, g_id):
+        maze = self.front_maze
+        for y in range(len(maze)):
+            for x in range(len(maze[0])):
+                if maze[y][x] == g_id:
+                    ghost_location = (y, x)
+                    return ghost_location
+
+    def legalactions(self, agent="pacman"):
         # if location is given, work based on location
         # if location is not given. work based on agent
-        maze = self.back_maze
 
-        legals = ["Stop"]
-        if location:
-            cy, cx = location  # (y,x)
+
+        legals = []
+
+        if agent == "pacman":
+            maze = self.back_maze # for avoiding walls
+            cy, cx = self.getpacmanlocation()
+            legals.append("Stop")
+
             if cy - 1 >= 0 and maze[cy - 1][cx] != 'W':  # if going one left is in bounds and not wall
                 legals.append("North")
             if cy + 1 <= len(maze) - 1 and maze[cy + 1][cx] != 'W':  # if going one right is in bounds and not wall
@@ -65,15 +88,24 @@ class Maze:
                 legals.append("West")
             return legals
 
-        elif agent == "pacman":
-            pacman_location = self.getpacmanlocation()
-            return self.legalactions(location=pacman_location)
+        elif agent.isdigit(): # agent is ghost
+            cy, cx = self.getghostlocation(agent)
+            back_maze = self.get_back_maze()
+            front_maze = self.get_front_maze()
 
-        elif agent == "ghost":
-            # TODO to be implemented after ghost agents
-            # location =
-            # return legalactions(maze, location=location)
-            return None
+            if cy - 1 >= 0 and back_maze[cy - 1][cx] != 'W':  # if going one left is in bounds and not wall
+                if not front_maze[cy-1][cx].isdigit(): legals.append("North") # and not a ghost
+
+            if cy + 1 <= len(back_maze) - 1 and back_maze[cy + 1][cx] != 'W':  # if going one right is in bounds and not wall
+                if not front_maze[cy+1][cx].isdigit(): legals.append("South") # and not a ghost
+
+            if cx + 1 <= len(back_maze[0]) - 1 and back_maze[cy][cx + 1] != 'W':  # if going one up is in bounds and not wall
+                if not front_maze[cy][cx+1].isdigit(): legals.append("East")  # and not a ghost
+
+            if cx - 1 >= 0 and back_maze[cy][cx - 1] != 'W': # if going one down is in bounds and not wall
+                if not front_maze[cy][cx-1].isdigit(): legals.append("West")  # and not a ghost
+
+            return legals
 
     def update_after_pacman_move(self, direction_input):
 
@@ -104,14 +136,14 @@ class Maze:
                 new_pacman_location = (y, x - 1)
 
             #2 if new location has ghost, die
-            if self.front_maze[new_pacman_location[0]][new_pacman_location[1]] == 'G':
-                self.pacman_die = True #TODO
+            if self.front_maze[new_pacman_location[0]][new_pacman_location[1]].isdigit():
+                self.pacman_die = True
 
             #3 if new location has food
             if self.back_maze[new_pacman_location[0]][new_pacman_location[1]] == '.':
                 self.pacman_score += 1  # increase score
                 new_back_maze[new_pacman_location[0]][new_pacman_location[1]] = ' '  # remove the food
-                if not self.food_left(): self.pacman_win = True # if there's no food left after removal, win
+
 
             #4 update pacman's position
             new_front_maze[new_pacman_location[0]][new_pacman_location[1]] = 'P'
@@ -122,6 +154,52 @@ class Maze:
             self.back_maze = new_back_maze
             self.front_maze = new_front_maze
             self.pacman_steps += 1
+            if not self.food_left(): self.pacman_win = True  # if there's no food left after removal, win
+
+    def update_after_ghost_move(self, g_id, direction_input):
+
+        new_front_maze = copy.deepcopy(self.front_maze)
+        ghost_direction = direction_input
+        legals = self.legalactions(agent=g_id)
+
+        # if the only legal action is to stop, stop
+        if len(legals) == 1 and legals[0] == 'Stop':
+            return
+
+        # old location of pacman is (y, x)
+        y, x = self.getghostlocation(g_id)
+
+        if direction_input in legals:
+
+            #1 find new location of ghost
+            new_ghost_location = None
+            if direction_input == "North":
+                new_ghost_location = (y - 1, x)
+            elif direction_input == "South":
+                new_ghost_location = (y + 1, x)
+            elif direction_input == "East":
+                new_ghost_location = (y, x + 1)
+            elif direction_input == "West":
+                new_ghost_location = (y, x - 1)
+
+            #1 check if ghost ate pacman
+            if self.front_maze[new_ghost_location[0]][new_ghost_location[1]] == 'P':
+                self.pacman_die = True
+
+            #2 update ghost's position
+            new_front_maze[new_ghost_location[0]][new_ghost_location[1]] = g_id
+
+            #3 remove ghost's old position
+            new_front_maze[y][x] = ' '
+
+            self.front_maze = new_front_maze
+
+    def move_ghosts(self):
+        # ghost_moves = [(agent_id, direction), (agent_id, direction)...]
+        for ghost in self.ghosts:
+            direction = ghost.move_direction(self)
+            g_id = ghost.g_id
+            self.update_after_ghost_move(g_id, direction)
 
     def food_left(self):
         for y in range(len(self.back_maze)):
@@ -133,9 +211,13 @@ class Maze:
     def check_game_end(self):
         if self.pacman_die:
             print(f"Pacman died at {self.pacman_steps} steps and ate {self.pacman_score} pieces of food.")
+            return True
 
         if self.pacman_win:
             print(f"Pacman won by eating {self.pacman_score} pieces of food in {self.pacman_steps} steps.")
+            return True
+
+        return False
 
     def get_back_maze(self):
         return self.back_maze
@@ -149,9 +231,6 @@ class Maze:
     def did_pacman_win(self):
         return self.pacman_die
 
-    def update_after_ghost_move(self, agent, direction_input):
-        #TODO
-        pass
 
 
 

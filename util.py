@@ -6,17 +6,19 @@ def manhattanDistance( xy1, xy2 ):
 
 def getinput(where="keyboard"):
     if where == "keyboard":
-        input = pygame.key.get_pressed()
-        if input[pygame.K_LEFT]:
-            out_direction = "West"
-        elif input[pygame.K_RIGHT]:
-            out_direction = "East"
-        elif input[pygame.K_UP]:
-            out_direction = "North"
-        elif input[pygame.K_DOWN]:
-            out_direction = "South"
-        else: return None
+        while True:  # Block until a key is pressed
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
 
-    #else: out_direction = "South" #TODO agent
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        return "West"
+                    elif event.key == pygame.K_RIGHT:
+                        return "East"
+                    elif event.key == pygame.K_UP:
+                        return "North"
+                    elif event.key == pygame.K_DOWN:
+                        return "South"
 
-    return out_direction
