@@ -1,6 +1,7 @@
 import copy
 import pygame
 from ghost import Ghost
+import util
 
 class Maze:
     def __init__(self, maze_txt_path):
@@ -96,10 +97,10 @@ class Maze:
             if cy - 1 >= 0 and back_maze[cy - 1][cx] != 'W':  # if going one left is in bounds and not wall
                 if not front_maze[cy-1][cx].isdigit(): legals.append("North") # and not a ghost
 
-            if cy + 1 <= len(back_maze) - 1 and back_maze[cy + 1][cx] != 'W':  # if going one right is in bounds and not wall
+            if cy + 1 < len(back_maze) - 1 and back_maze[cy + 1][cx] != 'W':  # if going one right is in bounds and not wall
                 if not front_maze[cy+1][cx].isdigit(): legals.append("South") # and not a ghost
 
-            if cx + 1 <= len(back_maze[0]) - 1 and back_maze[cy][cx + 1] != 'W':  # if going one up is in bounds and not wall
+            if cx + 1 < len(back_maze[0]) - 1 and back_maze[cy][cx + 1] != 'W':  # if going one up is in bounds and not wall
                 if not front_maze[cy][cx+1].isdigit(): legals.append("East")  # and not a ghost
 
             if cx - 1 >= 0 and back_maze[cy][cx - 1] != 'W': # if going one down is in bounds and not wall
@@ -230,6 +231,46 @@ class Maze:
 
     def did_pacman_win(self):
         return self.pacman_die
+
+    def action_result_location(self, action, location=None):
+        # returns where pacman will end up after action
+
+        if location is None: cy, cx = self.getpacmanlocation()
+        else : cy, cx = location
+        maze = self.back_maze
+        if action == "Stop":
+            return cy, cx
+        elif action == "North":
+            if cy - 1 >= 0 and maze[cy - 1][cx] != 'W':
+                return cy-1, cx
+        elif action == "South":
+            if cy + 1 < len(maze) - 1 and maze[cy + 1][cx] != 'W':
+                return cy+1, cx
+        elif action == "East":
+            if cx + 1 < len(maze[0]) - 1 and maze[cy][cx + 1] != 'W':
+                return cy, cx + 1
+        elif action == "West":
+            if cx - 1 >= 0 and maze[cy][cx - 1] != 'W':
+                return cy, cx - 1
+
+    def closest_foods(self, dist="manhattan"):
+        cy, cx = self.getpacmanlocation()
+        maze = self.back_maze
+        distances = []
+        for y in range(len(maze)):
+            for x in range(len(self.back_maze[0])):
+                if self.back_maze[y][x] == '.':
+                    distances.append([util.manhattanDistance((cy, cx), (y, x)), (y,x)])
+
+        # Step 1: Find the minimum distance
+        min_dist = min(distances, key=lambda x: x[0])[0]
+
+        # Step 2: Filter all items with that minimum distance
+        result = [item for item in distances if item[0] == min_dist]
+
+        return distances
+
+
 
 
 
