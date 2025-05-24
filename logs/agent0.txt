@@ -1,0 +1,185 @@
+Initialized agent#0 with layers: avoid_walls, avoid_ghosts, explore_random, move_toward_food, random_choice
+
+Action #0:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'North', 'East']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'North', 'East']
+Layer: Explore Randomly, Chosen actions: ['North', 'East']
+Layer: Move Toward Close Food, Chosen actions: ['North', 'East']
+Layer: Randomly Select, Chosen actions: ['North']
+Chosen actions after layer loop: ['North']
+
+Action #1:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'North', 'South']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'North', 'South']
+Layer: Explore Randomly, Chosen actions: ['North', 'South']
+Layer: Move Toward Close Food, Chosen actions: ['North', 'South']
+Layer: Randomly Select, Chosen actions: ['North']
+Chosen actions after layer loop: ['North']
+
+Action #2:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'North', 'South']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'North', 'South']
+Layer: Explore Randomly, Chosen actions: ['North', 'South']
+Layer: Move Toward Close Food, Chosen actions: ['North', 'South']
+Layer: Randomly Select, Chosen actions: ['North']
+Chosen actions after layer loop: ['North']
+
+Action #3:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'North', 'South']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'North', 'South']
+Layer: Explore Randomly, Chosen actions: ['North', 'South']
+Layer: Move Toward Close Food, Chosen actions: ['North', 'South']
+Layer: Randomly Select, Chosen actions: ['North']
+Chosen actions after layer loop: ['North']
+
+Action #4:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['South', 'East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['South', 'East', 'West']
+Layer: Randomly Select, Chosen actions: ['South']
+Chosen actions after layer loop: ['South']
+
+Action #5:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'North', 'South']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'North', 'South']
+Layer: Explore Randomly, Chosen actions: ['North', 'South']
+Layer: Move Toward Close Food, Chosen actions: ['North', 'South']
+Layer: Randomly Select, Chosen actions: ['North']
+Chosen actions after layer loop: ['North']
+
+Action #6:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['South', 'East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['South', 'East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #7:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #8:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['South', 'East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['South', 'East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #9:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['East']
+Chosen actions after layer loop: ['East']
+
+Action #10:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['South', 'East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['South', 'East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #11:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #12:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #13:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['East']
+Chosen actions after layer loop: ['East']
+
+Action #14:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #15:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #16:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['South', 'East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['South', 'East', 'West']
+Layer: Randomly Select, Chosen actions: ['East']
+Chosen actions after layer loop: ['East']
+
+Action #17:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['East']
+Chosen actions after layer loop: ['East']
+
+Action #18:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #19:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #20:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['South', 'East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['South', 'East', 'West']
+Layer: Randomly Select, Chosen actions: ['West']
+Chosen actions after layer loop: ['West']
+
+Action #21:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['East', 'West']
+Layer: Randomly Select, Chosen actions: ['East']
+Chosen actions after layer loop: ['East']
+
+Action #22:
+Layer: Avoid Walls, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Avoid Ghosts, Chosen actions: ['Stop', 'South', 'East', 'West']
+Layer: Explore Randomly, Chosen actions: ['South', 'East', 'West']
+Layer: Move Toward Close Food, Chosen actions: ['South', 'East', 'West']
+Layer: Randomly Select, Chosen actions: ['South']
+Chosen actions after layer loop: ['South']

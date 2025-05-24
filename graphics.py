@@ -66,7 +66,7 @@ def draw_ghost(surface, center, color):
     # Draw the polygon
     pygame.draw.polygon(surface, color, ghost_points)
 
-def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboard"):
+def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboard", agent=None):
     pygame.init()
 
     len_y, len_x = len(maze.back_maze), len(maze.back_maze[0])
@@ -96,14 +96,10 @@ def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboar
                     draw_pacman_directional(screen, (cx, cy), r, PACMAN_COLOR, maze.pacman_direction)
 
                 elif current_cell.isdigit():
-                    # TODO probably need to draw different ghosts as different agents too
-
                     # Scale and offset the shape to the cell center
                     cx, cy = rect.center
                     color = GHOST_COLORS[int(current_cell)]
                     draw_ghost(screen, (cx, cy), color)
-
-
 
         pygame.display.flip()
 
@@ -114,14 +110,29 @@ def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboar
 
         # this is where agents will send their inputs
         if turn == "pacman":
-            input_pacman = util.getinput(where=input_type)
-            if input_pacman:
-                maze.pacman_direction = input_pacman
+            if input_type == "keyboard":
+                input_pacman = util.getinput(where=input_type)
+                if input_pacman is not None:
+                    maze.pacman_direction = input_pacman
 
-                # update maze
-                maze.update_after_pacman_move(input_pacman)
-                if maze.check_game_end():
-                    running = False
+                    # update maze
+                    maze.update_after_pacman_move(input_pacman)
+
+
+            elif input_type == "agent":
+                if agent is None: raise ValueError("Agent is not defined. Make sure to pass agent to draw_maze if input_type is agent.")
+                else:
+                    action_pacman = agent.act(maze)
+                    if action_pacman is None: raise ValueError("Agent's act() returned None in draw_maze.")
+
+                    # update pacman direction
+                    maze.pacman_direction = action_pacman
+
+                    # update maze
+                    maze.update_after_pacman_move(action_pacman)
+
+            if maze.check_game_end():
+                running = False
 
             turn = "ghost"
 

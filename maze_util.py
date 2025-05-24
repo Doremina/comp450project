@@ -252,6 +252,7 @@ class Maze:
         elif action == "West":
             if cx - 1 >= 0 and maze[cy][cx - 1] != 'W':
                 return cy, cx - 1
+        return cy, cx
 
     def closest_foods(self, dist="manhattan"):
         cy, cx = self.getpacmanlocation()

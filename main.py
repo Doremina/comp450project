@@ -3,6 +3,8 @@ import graphics
 import maze_util
 import copy
 from maze_util import Maze
+import subsumption
+from subsumption import SubsumptionAgent
 
 # Constants
 CELL_SIZE = 24
@@ -18,8 +20,8 @@ random_seed = 42
 
 if __name__ == "__main__":
     maze_path = "./mazes/bigMaze.txt"
-    agents = ["keyboard"]
-    for agent in agents:
-        maze = Maze(maze_path)
-        graphics.draw_maze(maze, input_type=agent)
+    basic_agent = SubsumptionAgent(["avoid_walls", "avoid_ghosts", "explore_random", "move_toward_food", "random_choice"])
+
+    maze = Maze(maze_path)
+    graphics.draw_maze(maze, input_type="agent", agent=basic_agent)
 
