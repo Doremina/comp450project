@@ -19,7 +19,7 @@ random_seed = 42
 
 
 if __name__ == "__main__":
-    maze_path = "./mazes/bigMaze.txt"
+    maze_path = "./mazes/smallMaze.txt"
     basic_agent = SubsumptionAgent(["avoid_walls", "avoid_ghosts", "explore_random", "move_toward_food", "random_choice"])
 
     maze = Maze(maze_path)

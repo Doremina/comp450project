@@ -211,14 +211,11 @@ class Maze:
 
     def check_game_end(self):
         if self.pacman_die:
-            print(f"Pacman died at {self.pacman_steps} steps and ate {self.pacman_score} pieces of food.")
-            return True
+            return "Lose", self.pacman_steps, self.pacman_score
 
         if self.pacman_win:
-            print(f"Pacman won by eating {self.pacman_score} pieces of food in {self.pacman_steps} steps.")
-            return True
+            return "Win", self.pacman_steps, self.pacman_score
 
-        return False
 
     def get_back_maze(self):
         return self.back_maze

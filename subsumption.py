@@ -54,6 +54,24 @@ class LayerExploreRandomly:
         if actions: return actions
         else: return given_actions.copy()
 
+class LayerExploreRandomlyMemory:
+    name = "Explore Randomly With Memory"
+    def __init__(self, agent_id: int):
+        self.visited_locations = []
+        self.agent_id = agent_id
+
+    def get_actions(self, maze, given_actions=None):
+        if given_actions is None: given_actions = ["Stop", "North", "South", "East", "West"]
+
+        actions = given_actions.copy()
+        actions.remove("Stop")
+
+        # lower layer override
+        if actions:
+            return actions
+        else:
+            return given_actions.copy()
+
 class LayerMoveTowardCloseFood:
     name = "Move Toward Close Food"
     def get_actions(self, maze, given_actions=None):
@@ -100,6 +118,7 @@ LAYERS_DICT = {
     "avoid_walls": LayerAvoidWalls,
     "avoid_ghosts": LayerAvoidGhosts,
     "explore_random": LayerExploreRandomly,
+    "explore_random_memory": LayerExploreRandomlyMemory,
     "move_toward_food": LayerMoveTowardCloseFood,
     "random_choice": LayerRandomlySelect,
 }
@@ -107,13 +126,22 @@ LAYERS_DICT = {
 # AGENTS
 class SubsumptionAgent:
     agent_num = 0
-    def __init__(self, layers, log_dir = "logs"):
-        self.layers = [LAYERS_DICT[layer_name]() for layer_name in layers]
-        self.action_count = 0
+    def __init__(self, layer_names, log_dir = "logs"):
+        #init id
         self.agent_num = SubsumptionAgent.agent_num
         SubsumptionAgent.agent_num += 1
 
-        # Create log directory if it doesn't exist
+        # init layers
+        self.layers = []
+        self.initialize_layers(layer_names)
+
+        # init action count for score calculation later
+        self.action_count = 0
+
+        # init eaten food amount for score calculation later
+        self.food = 0 #TODO increase in game
+
+        # Create log directory
         os.makedirs(log_dir, exist_ok=True)
 
         # Define log file path
@@ -121,12 +149,22 @@ class SubsumptionAgent:
         self.log_file = open(self.log_path, "w")
 
         # Initial log message
-        self.log(f"Initialized agent#{self.agent_num} with layers: {', '.join(layers)}")
+        self.log(f"Initialized agent#{self.agent_num} with layers: {', '.join(layer_names)}")
 
+    def initialize_layers(self, layers):
+        for layer_name in layers:
+            if layer_name == "explore_random_memory": self.layers.append(LAYERS_DICT["explore_random_memory"](self.agent_num))
+            self.layers.append(LAYERS_DICT[layer_name]())
 
     def log(self, message):
         self.log_file.write(message + "\n")
         self.log_file.flush()
+
+    def eat_food(self):
+        self.food += 1
+
+    def game_end(self, winlose:str, steps: int, score:int):
+        self.log(f"Game ended with {winlose}.\nSteps Taken: {steps}, Score: {score}.")
 
     def act(self, maze):
 
