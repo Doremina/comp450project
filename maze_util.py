@@ -229,6 +229,7 @@ class Maze:
     def did_pacman_win(self):
         return self.pacman_die
 
+    #TODO debug this
     def action_result_location(self, action, location=None):
         # returns where pacman will end up after action
 
@@ -241,10 +242,10 @@ class Maze:
             if cy - 1 >= 0 and maze[cy - 1][cx] != 'W':
                 return cy-1, cx
         elif action == "South":
-            if cy + 1 < len(maze) - 1 and maze[cy + 1][cx] != 'W':
+            if cy + 1 <= len(maze) - 1 and maze[cy + 1][cx] != 'W':
                 return cy+1, cx
         elif action == "East":
-            if cx + 1 < len(maze[0]) - 1 and maze[cy][cx + 1] != 'W':
+            if cx + 1 <= len(maze[0]) - 1 and maze[cy][cx + 1] != 'W':
                 return cy, cx + 1
         elif action == "West":
             if cx - 1 >= 0 and maze[cy][cx - 1] != 'W':

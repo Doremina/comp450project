@@ -19,9 +19,12 @@ random_seed = 42
 
 
 if __name__ == "__main__":
-    maze_path = "./mazes/smallMaze.txt"
-    basic_agent = SubsumptionAgent(["avoid_walls", "avoid_ghosts", "explore_random", "move_toward_food", "random_choice"])
-
+    maze_name = "smallMaze"
+    maze_path = "./mazes/"+ maze_name + ".txt"
     maze = Maze(maze_path)
-    graphics.draw_maze(maze, input_type="agent", agent=basic_agent)
+
+    basic_agent = SubsumptionAgent(["avoid_walls", "avoid_ghosts", "move_toward_food","explore_random", "random_choice"], agent_name = "basic_agent_for_empty_maze")
+    agent_with_small_memory = SubsumptionAgent(["avoid_walls", "avoid_ghosts", "move_toward_food","explore_random_memory"], agent_name = "agent_with_small_memory")
+
+    graphics.draw_maze(maze, input_type="agent", agent=agent_with_small_memory, maze_name = maze_name)
 

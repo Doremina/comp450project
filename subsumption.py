@@ -26,51 +26,77 @@ class LayerAvoidWalls:
             if actions_temp: return actions_temp
             else: return given_actions.copy()
 
+#TODO: create another ghost avoid layer which can sense 2 steps ahead (a better sensor)
+#TODO: this layer is buggy i couldn't fix yet
 class LayerAvoidGhosts:
     name = "Avoid Ghosts"
     def get_actions(self, maze, given_actions=None):
         if given_actions is None: given_actions = ["Stop", "North", "South", "East", "West"]
 
         actions = given_actions.copy()
-        for i in range(len(actions)-1, -1, -1):
+        len_actions = len(actions)
+        dummy = False
+        for i in range(len_actions-1, -1, -1):
             ry, rx = maze.action_result_location(actions[i])
             if maze.get_front_maze()[ry][rx].isdigit(): # is ghost
+                print(f"REMOVING {actions[i]} (ghost at {ry},{rx})")
+                dummy = True
                 del actions[i]
 
-        # lower layer override
-        if actions: return actions
-        else: return given_actions.copy()
 
-#TODO: create another explore randomly with a small memory in it.
+
+        # lower layer override
+        if actions:
+            if dummy: print(f"actions: {actions}")
+            return actions
+        else:
+            if dummy: print(f"actions: {actions}")
+            return given_actions.copy()
+
 class LayerExploreRandomly:
     name = "Explore Randomly"
     def get_actions(self, maze, given_actions=None):
         if given_actions is None: given_actions = ["Stop", "North", "South", "East", "West"]
 
         actions = given_actions.copy()
-        actions.remove("Stop")
+        if "Stop" in actions: actions.remove("Stop")
 
         # lower layer override
         if actions: return actions
         else: return given_actions.copy()
 
+# This layer only works if it is the last one
 class LayerExploreRandomlyMemory:
     name = "Explore Randomly With Memory"
-    def __init__(self, agent_id: int):
-        self.visited_locations = []
-        self.agent_id = agent_id
+    def __init__(self):
+        self.last_actions = [] # index 0 holds the oldest, index 2 holds the newest
 
-    def get_actions(self, maze, given_actions=None):
-        if given_actions is None: given_actions = ["Stop", "North", "South", "East", "West"]
-
-        actions = given_actions.copy()
-        actions.remove("Stop")
-
-        # lower layer override
-        if actions:
-            return actions
+    def add_action(self, action):
+        if len(self.last_actions) < 3:
+            self.last_actions.append(action)
         else:
-            return given_actions.copy()
+            self.last_actions.pop(0)
+            self.last_actions.append(action)
+
+    def get_actions(self, maze, given_actions):
+        actions = given_actions.copy()
+        if "Stop" in actions: actions.remove("Stop")
+
+        preferred_action = None
+        if self.last_actions:
+            for action in actions:
+                if action == self.last_actions[-1]:
+                    preferred_action = action
+                    break
+
+        if preferred_action is not None:
+            self.add_action(preferred_action)
+            return [preferred_action]
+        else:
+            action = random.choice(actions)
+            self.add_action(action)
+            return [action]
+
 
 class LayerMoveTowardCloseFood:
     name = "Move Toward Close Food"
@@ -81,9 +107,9 @@ class LayerMoveTowardCloseFood:
             score = 0
             cy1, cx1 = maze.action_result_location(action)
             cy2, cx2 = maze.action_result_location(action, (cy1, cx1))
-            if maze.get_front_maze()[cy1][cx1] == '.':
+            if maze.get_back_maze()[cy1][cx1] == '.':
                 score += 1
-            if maze.get_front_maze()[cy2][cx2] == '.':
+            if maze.get_back_maze()[cy2][cx2] == '.':
                 score += 1
             best_results.append((score, action))
 
@@ -126,10 +152,12 @@ LAYERS_DICT = {
 # AGENTS
 class SubsumptionAgent:
     agent_num = 0
-    def __init__(self, layer_names, log_dir = "logs"):
+    def __init__(self, layer_names, agent_name ="unnamed", log_dir = "logs"):
         #init id
         self.agent_num = SubsumptionAgent.agent_num
         SubsumptionAgent.agent_num += 1
+
+        self.agent_name = agent_name
 
         # init layers
         self.layers = []
@@ -145,7 +173,7 @@ class SubsumptionAgent:
         os.makedirs(log_dir, exist_ok=True)
 
         # Define log file path
-        self.log_path = os.path.join(log_dir, f"agent{self.agent_num}.txt")
+        self.log_path = os.path.join(log_dir, f"{self.agent_num}{self.agent_name}.txt")
         self.log_file = open(self.log_path, "w")
 
         # Initial log message
@@ -153,7 +181,6 @@ class SubsumptionAgent:
 
     def initialize_layers(self, layers):
         for layer_name in layers:
-            if layer_name == "explore_random_memory": self.layers.append(LAYERS_DICT["explore_random_memory"](self.agent_num))
             self.layers.append(LAYERS_DICT[layer_name]())
 
     def log(self, message):

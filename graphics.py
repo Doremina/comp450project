@@ -2,7 +2,8 @@ import pygame
 import math
 import maze_util
 import util
-import copy
+import glob
+import os
 
 # Constants
 CELL_SIZE = 24
@@ -66,7 +67,18 @@ def draw_ghost(surface, center, color):
     # Draw the polygon
     pygame.draw.polygon(surface, color, ghost_points)
 
-def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboard", agent=None):
+
+def clear_screenshots(path):
+    folder = path
+    files = glob.glob(os.path.join(folder, "*"))
+
+    for file in files:
+        try:
+            os.remove(file)
+        except Exception as e:
+            print(f"Failed to delete {file}: {e}")
+
+def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboard", agent=None, maze_name="unnamed_maze"):
     pygame.init()
 
     len_y, len_x = len(maze.back_maze), len(maze.back_maze[0])
@@ -75,6 +87,11 @@ def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboar
     clock = pygame.time.Clock()
     running = True
     turn = "pacman"
+
+    screenshot_folder = f"./logs/screenshots/{agent.agent_name}-{maze_name}/"
+    os.makedirs(screenshot_folder, exist_ok=True)
+    frame_count = 0
+    clear_screenshots(screenshot_folder)
 
     while running:
         screen.fill(BG_COLOR)
@@ -156,5 +173,10 @@ def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboar
             turn = "pacman"
 
 
-        clock.tick(10)
+        image_dir = screenshot_folder + f"{frame_count}.png"
+        pygame.image.save(screen, image_dir)
+        frame_count += 1
+        clock.tick(30)
+
+    print(f"Game ended when turn: {turn}")
     pygame.quit()
