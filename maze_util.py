@@ -81,9 +81,9 @@ class Maze:
 
             if cy - 1 >= 0 and maze[cy - 1][cx] != 'W':  # if going one left is in bounds and not wall
                 legals.append("North")
-            if cy + 1 <= len(maze) - 1 and maze[cy + 1][cx] != 'W':  # if going one right is in bounds and not wall
+            if cy + 1 < len(maze) - 1 and maze[cy + 1][cx] != 'W':  # if going one right is in bounds and not wall
                 legals.append("South")
-            if cx + 1 <= len(maze[0]) - 1 and maze[cy][cx + 1] != 'W':  # if going one up is in bounds and not wall
+            if cx + 1 < len(maze[0]) - 1 and maze[cy][cx + 1] != 'W':  # if going one up is in bounds and not wall
                 legals.append("East")
             if cx - 1 >= 0 and maze[cy][cx - 1] != 'W':
                 legals.append("West")
@@ -125,7 +125,7 @@ class Maze:
         if direction_input in legals:
 
             #1 find new location of pacman
-            new_pacman_location = None
+            new_pacman_location = y, x
             if direction_input == "North":
                 #new_front_maze[y - 1][x] = 'P'
                 new_pacman_location = (y - 1, x)
@@ -198,9 +198,11 @@ class Maze:
     def move_ghosts(self):
         # ghost_moves = [(agent_id, direction), (agent_id, direction)...]
         for ghost in self.ghosts:
+            dummy = [ghost.g_id for ghost in self.ghosts]
             direction = ghost.move_direction(self)
             g_id = ghost.g_id
             self.update_after_ghost_move(g_id, direction)
+            if self.getpacmanlocation() is None: break
 
     def food_left(self):
         for y in range(len(self.back_maze)):

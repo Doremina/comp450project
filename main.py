@@ -23,8 +23,11 @@ if __name__ == "__main__":
     maze_path = "./mazes/"+ maze_name + ".txt"
     maze = Maze(maze_path)
 
+    input_type = "agent" # for automated agent
+    #input_type = "keyboard" # for playing manually
+
     basic_agent = SubsumptionAgent(["avoid_walls", "avoid_ghosts", "move_toward_food","explore_random", "random_choice"], agent_name = "basic_agent_for_empty_maze")
     agent_with_small_memory = SubsumptionAgent(["avoid_walls", "avoid_ghosts", "move_toward_food","explore_random_memory"], agent_name = "agent_with_small_memory")
 
-    graphics.draw_maze(maze, input_type="agent", agent=agent_with_small_memory, maze_name = maze_name)
+    graphics.draw_maze(maze, input_type=input_type, agent=basic_agent, maze_name = maze_name)
 

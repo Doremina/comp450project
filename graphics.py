@@ -166,8 +166,8 @@ def draw_maze(maze: maze_util.Maze, pacman_direction="East", input_type="keyboar
                     winlose, steps, score = maze.check_game_end()
                     agent.game_end(winlose, steps, score)
                 elif input_type == "keyboard":
-                    print(
-                        f"Game ended with {maze.check_game_end()[0]}.\nSteps Taken: {maze.check_game_end()[1]}, Score: {maze.check_game_end()[2]}.")
+                    print(f"Game ended with {maze.check_game_end()[0]}.\nSteps Taken: {maze.check_game_end()[1]}, Score: {maze.check_game_end()[2]}.")
+
                 running = False
 
             turn = "pacman"

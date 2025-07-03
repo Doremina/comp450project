@@ -33,25 +33,37 @@ class LayerAvoidGhosts:
     def get_actions(self, maze, given_actions=None):
         if given_actions is None: given_actions = ["Stop", "North", "South", "East", "West"]
 
+        """
         actions = given_actions.copy()
         len_actions = len(actions)
-        dummy = False
         for i in range(len_actions-1, -1, -1):
             ry, rx = maze.action_result_location(actions[i])
             if maze.get_front_maze()[ry][rx].isdigit(): # is ghost
-                print(f"REMOVING {actions[i]} (ghost at {ry},{rx})")
-                dummy = True
                 del actions[i]
+        """
+
+        safe_actions_1 = []
+        for action in given_actions:
+            ry, rx = maze.action_result_location(action)
+            cell = maze.get_front_maze()[ry][rx]
+            if not str(cell).isdigit():  # is ghost
+                safe_actions_1.append(action)
+
+        safe_actions_2 = []
+        for action in safe_actions_1:
+            ry, rx = maze.action_result_location(action)
+            for action2 in ["East", "North", "South", "West"]:
+                ry, rx = maze.action_result_location(action2)
+                if not maze.get_front_maze()[ry][rx].isdigit():
+                    safe_actions_2.append(action)
+
 
 
 
         # lower layer override
-        if actions:
-            if dummy: print(f"actions: {actions}")
-            return actions
-        else:
-            if dummy: print(f"actions: {actions}")
-            return given_actions.copy()
+        if safe_actions_2: return safe_actions_2
+        elif safe_actions_1: return safe_actions_1
+        else: return given_actions.copy()
 
 class LayerExploreRandomly:
     name = "Explore Randomly"
